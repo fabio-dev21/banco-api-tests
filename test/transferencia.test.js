@@ -5,9 +5,13 @@ const { obterToken } = require('../helpers/autenticacao');
 
 describe('Trasferencias', ()=>{
     describe('POST/Transferencias',()=>{
+        let token 
+        beforeEach(async () => {
+           token = await obterToken('julio.lima',123456)
+        })
         it('Deve retonar sucesso codigo 201 se a transferencia for maior ou igual a R$10:00', async () => {
           
-            const token = await obterToken('julio.lima',123456)
+           
             const resposta = await request(process.env.BASE_URL)   
             .post("/transferencias")
             .set('content-type','application/json')
