@@ -1,22 +1,12 @@
 const request = require('supertest');
 const {expect} = require('chai');
+require('dotenv').config();
 
-/*const chamada = await request('http://localhost:3000')
-           .post('/login')  
-           .set('Content-Type','application/json') 
-           .send( 
-                {
-                 'username': 'julio.lima',
-                 'senha': '123456'
-                                   
-                })
-
-                const Token = Token.body.token;*/
 
 describe('Trasferencias', ()=>{
     describe('POST/Transferencias',()=>{
         it('Deve retonar sucesso codigo 201 se a transferencia for maior ou igual a R$10:00', async () => {
-            const autenticacao = await request('http://localhost:3000')
+            const autenticacao = await request(process.env.BASE_URL)
             .post('/login')
             .set('content-type','application/json')
             .send( {
@@ -25,7 +15,7 @@ describe('Trasferencias', ()=>{
                                    
                 })
             const token =autenticacao.body.token
-            const resposta = await request('http://localhost:3000')   
+            const resposta = await request(process.env.BASE_URL)   
             .post("/transferencias")
             .set('content-type','application/json')
             .set('Authorization','bearer '+token)
