@@ -23,20 +23,29 @@ describe('Trasferencias', ()=>{
         it('Deve retonar sucesso codigo 422 se a transferencia for menor que R$10:00', async () => {
            const bodyTransferencias = {...postTransferencias}
            bodyTransferencias.valor = 7
-           const token = await obterToken('julio.lima',123456)
-            const resposta = await request('http://localhost:3000')   
+            const resposta = await request(process.env.BASE_URL)   
             .post("/transferencias")
             .set('content-type','application/json')
             .set('Authorization','bearer '+token)
-            .send(  
-                {
-                    contaOrigem:3,
-                    contaDestino:2,
-                    valor: 9.99,
-                    token: ''
-                })
+            .send(bodyTransferencias)
             
              expect(resposta.status).to.equal(422);
+        })
+        it('Deve retornar erro 401 se a tranferencia for acima de 5000 sem token', async ()=>{
+            const bodyTransferencias = {...postTransferencias}
+            bodyTransferencias.valor = 5001
+            const resposta = await request(process.env.BASE_URL)
+            .post('/transferencias')
+            .set('content-type','application/json')
+            .set('Authorization',`Bearer ${token}`)
+            .send(bodyTransferencias)
+
+            expect(resposta.status).to.equal(401)
+            
+
+
+
+
         })
              
 
@@ -64,7 +73,7 @@ describe('Trasferencias', ()=>{
 
             expect(resposta.status).to.equal(200)
             expect(resposta.body.limit).to.equal(10)
-            expect(resposta.body.transferencias).to.have.lengthOf(11);
+            expect(resposta.body.transferencias).to.have.lengthOf(10);
 
 
 
